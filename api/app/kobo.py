@@ -204,6 +204,7 @@ def get_form_dates(
     form_id: str,
     datetime_field: str,
     filters: Optional[str],
+    province: Optional[str],
 ) -> list[dict[str, Any]]:
     """Get all form responses dates using Kobo api."""
     auth, form_fields = get_kobo_params(form_id, datetime_field, None, filters)
@@ -222,6 +223,15 @@ def get_form_dates(
             continue
         filtered_forms.append(form)
 
+        # Geospatial filter by admin area
+        if province is not None:
+            admin_condition = False
+            if "Province" in form and form["Province"] == province:
+                admin_condition = True
+            elif "Commune" in form and form["Commune"][0:2] == province:
+                admin_condition = True
+            conditions.append(admin_condition)
+
     dates_list = set([f.get("date").date().isoformat() for f in filtered_forms])
     sorted_dates_list = sorted(dates_list)
 
@@ -233,9 +243,9 @@ def get_form_responses(
     end_datetime: datetime,
     form_id: str,
     datetime_field: str,
+    form_url: str,
     geom_field: Optional[str],
     filters: Optional[str],
-    form_url: str,
     province: Optional[str] = None,
 ) -> list[dict]:
     """Get all form responses using Kobo api."""

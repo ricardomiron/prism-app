@@ -6,7 +6,7 @@ import secrets
 
 from app.database.database import AuthDataBase
 from app.database.user_info_model import UserInfoModel
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Path
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -36,7 +36,9 @@ def verify_hash(password: str, saved_salt: str) -> bytes:
     return key
 
 
-def validate_user(credentials: HTTPBasicCredentials = depends) -> UserInfoModel:
+def validate_user(
+    credentials: HTTPBasicCredentials = depends, no_error=False
+) -> UserInfoModel:
     """Validate user info."""
     if not auth_db.active:
         return UserInfoModel(access={})
@@ -44,6 +46,10 @@ def validate_user(credentials: HTTPBasicCredentials = depends) -> UserInfoModel:
     try:
         user_info = auth_db.get_by_username(username=credentials.username)
     except SQLAlchemyError as error:
+        # Return a user with no access. This is ssed for our date endpoints.
+        if no_error:
+            return UserInfoModel(access={})
+
         logger.error(error)
         raise HTTPException(
             status_code=500, detail="An internal error occurred."
@@ -77,3 +83,8 @@ def validate_user(credentials: HTTPBasicCredentials = depends) -> UserInfoModel:
             headers={"WWW-Authenticate": "Basic"},
         )
     return user_info
+
+
+def validate_user_no_error(credentials: HTTPBasicCredentials = depends):
+    """Validate user info and accept errors."""
+    return validate_user(credentials, no_error=True)

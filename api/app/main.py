@@ -7,7 +7,7 @@ from typing import Any, Optional
 from urllib.parse import ParseResult, urlencode, urlunparse
 
 import rasterio  # type: ignore
-from app.auth import validate_user
+from app.auth import validate_user, validate_user_no_error
 from app.caching import FilePath, cache_file, cache_geojson
 from app.database.alert_model import AlertModel
 from app.database.database import AlertsDataBase
@@ -181,10 +181,12 @@ def get_kobo_form_dates(
     koboUrl: HttpUrl,
     formId: str,
     datetimeField: str,
+    user_info: UserInfoModel = Depends(validate_user_no_error),
     filters: Optional[str] = None,
 ):
     """Get all form response dates."""
-    return get_form_dates(koboUrl, formId, datetimeField, filters)
+    province = user_info.access.get("province", None)
+    return get_form_dates(koboUrl, formId, datetimeField, filters, province)
 
 
 @app.get("/kobo/forms")
@@ -214,9 +216,9 @@ def get_kobo_forms(
         end_datetime,
         formId,
         datetimeField,
+        koboUrl,
         geomField,
         filters,
-        koboUrl,
         province,
     )
 
