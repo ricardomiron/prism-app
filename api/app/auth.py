@@ -6,13 +6,19 @@ import secrets
 
 from app.database.database import AuthDataBase
 from app.database.user_info_model import UserInfoModel
-from fastapi import Depends, HTTPException, status, Path
+from fastapi import Depends, HTTPException, status, Path, Request
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from sqlalchemy.exc import SQLAlchemyError
 
 logger = logging.getLogger(__name__)
 
 security = HTTPBasic()
+
+
+async def optional_security(request: Request):
+    """Optional security implementation for the date endpoint."""
+    return await security(request)
+
 depends = Depends(security)
 
 auth_db = AuthDataBase()
@@ -46,7 +52,7 @@ def validate_user(
     try:
         user_info = auth_db.get_by_username(username=credentials.username)
     except SQLAlchemyError as error:
-        # Return a user with no access. This is ssed for our date endpoints.
+        # Return a user with no access. This is used by our date endpoint.
         if no_error:
             return UserInfoModel(access={})
 
@@ -85,6 +91,10 @@ def validate_user(
     return user_info
 
 
-def validate_user_no_error(credentials: HTTPBasicCredentials = depends):
+def validate_user_no_error(
+    credentials: HTTPBasicCredentials = Depends(optional_security),
+):
     """Validate user info and accept errors."""
+    if credentials is None or credentials.username == "" or credentials.password == "":
+        return UserInfoModel(access={})
     return validate_user(credentials, no_error=True)
