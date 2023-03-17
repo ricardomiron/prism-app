@@ -19,6 +19,7 @@ async def optional_security(request: Request):
     """Optional security implementation for the date endpoint."""
     return await security(request)
 
+
 depends = Depends(security)
 
 auth_db = AuthDataBase()
