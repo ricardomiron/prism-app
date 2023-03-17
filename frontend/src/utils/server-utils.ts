@@ -100,16 +100,26 @@ const pointDataFetchPromises: {
  */
 async function getPointDataCoverage(layer: PointDataLayerProps) {
   const {
-    dateUrl: url,
+    dateUrl,
     fallbackData: fallbackUrl,
     id,
     additionalQueryParams,
     loader,
   } = layer;
 
+  // TODO - extract default loader into its own file.
+  switch (loader) {
+    case PointDataLoader.EWS:
+      return createEWSDatesArray();
+    case PointDataLoader.ACLED:
+      return fetchACLEDDates(dateUrl, additionalQueryParams);
+    default:
+      break;
+  }
+
   // TODO - merge formatUrl and queryParamsToString
-  const fetchUrlWithParams = `${url}${
-    url.includes('?') ? '&' : '?'
+  const fetchUrlWithParams = `${dateUrl}${
+    dateUrl.includes('?') ? '&' : '?'
   }${queryParamsToString(additionalQueryParams)}`;
 
   const loadPointLayerDataFromURL = async (fetchUrl: string) => {
@@ -123,15 +133,6 @@ async function getPointDataCoverage(layer: PointDataLayerProps) {
     }
     return (await response.json()) as PointDataDates;
   };
-
-  switch (loader) {
-    case PointDataLoader.EWS:
-      return createEWSDatesArray();
-    case PointDataLoader.ACLED:
-      return fetchACLEDDates(url, additionalQueryParams);
-    default:
-      break;
-  }
 
   // eslint-disable-next-line fp/no-mutation
   const data = await (pointDataFetchPromises[fetchUrlWithParams] =
