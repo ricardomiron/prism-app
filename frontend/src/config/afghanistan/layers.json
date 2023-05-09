@@ -1120,6 +1120,7 @@
       "path": "data/afghanistan/ipc-06-2022.json",
       "data_field": "area_phase",
       "admin_level": 1,
+      "boundary": "admin1_boundaries",
       "admin_code": "admin1Pcode",
       "opacity": 0.9,
       "legend": [
@@ -1157,6 +1158,7 @@
       "path": "data/afghanistan/ipc-03-2022.json",
       "data_field": "area_phase",
       "admin_level": 1,
+      "boundary": "admin1_boundaries",
       "admin_code": "admin1Pcode",
       "opacity": 0.9,
       "legend": [
@@ -1194,6 +1196,7 @@
       "path": "data/afghanistan/ipc-03-2022.json",
       "data_field": "pop_p3+",
       "admin_level": 1,
+      "boundary": "admin1_boundaries",
       "admin_code": "admin1Pcode",
       "opacity": 0.9,
       "legend": [
@@ -1236,6 +1239,7 @@
       "path": "data/afghanistan/ipc-06-2022.json",
       "data_field": "pop_p3+",
       "admin_level": 1,
+      "boundary": "admin1_boundaries",
       "admin_code": "admin1Pcode",
       "opacity": 0.9,
       "legend": [
@@ -1278,6 +1282,7 @@
       "path": "data/afghanistan/ipc-03-2022.json",
       "data_field": "perc_p3+",
       "admin_level": 1,
+      "boundary": "admin1_boundaries",
       "admin_code": "admin1Pcode",
       "opacity": 0.9,
       "legend": [
@@ -1320,6 +1325,7 @@
     "path": "data/afghanistan/ipc-06-2022.json",
     "data_field": "perc_p3+",
     "admin_level": 1,
+    "boundary": "admin1_boundaries",
     "admin_code": "admin1Pcode",
     "opacity": 0.9,
     "legend": [
