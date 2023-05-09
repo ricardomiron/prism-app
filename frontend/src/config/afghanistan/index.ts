@@ -9,5 +9,5 @@ export default {
   rawLayers,
   rawTables,
   translation,
-  defaultBoundariesFile: 'geoBoundaries-AFG-ADM1-extended.json',
+  defaultBoundariesFile: 'geoBoundaries-AFG-ADM2.json',
 };

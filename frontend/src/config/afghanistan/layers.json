@@ -1,7 +1,25 @@
 {
     "admin_boundaries": {
       "type": "boundary",
-      "path": "data/afghanistan/geoBoundaries-AFG-ADM1-extended.json",
+      "path": "data/afghanistan/geoBoundaries-AFG-ADM2.json",
+      "opacity": 0.8,
+      "admin_code": "shapeID",
+      "admin_level_names": ["admin1Name_en", "dv_adm2_name"],
+      "admin_level_local_names": ["admin1Name_da", "dv_adm2_name"],
+      "styles:": {
+        "fill": {
+          "fill-opacity": 0
+        },
+        "line": {
+          "line-color": "gray",
+          "line-width": 1.5,
+          "line-opacity": 0.8
+        }
+      }
+    },
+    "admin1_boundaries": {
+      "type": "boundary",
+      "path": "data/afghanistan/geoBoundaries-AFG-ADM1.json",
       "opacity": 0.8,
       "admin_code": "admin1Pcode",
       "admin_level_names": ["admin1Name_en"],
