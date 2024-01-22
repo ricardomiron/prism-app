@@ -250,7 +250,15 @@ const MapComponent = memo(
 
       const { layers } = map.getStyle();
       // Find the first symbol on the map to make sure we add boundary layers below them.
-      setFirstSymbolId(layers?.find(layer => layer.type === 'symbol')?.id);
+      setFirstSymbolId(undefined);
+
+      // remove all symbol layers from the map
+      // eslint-disable-next-line
+      layers?.forEach(layer => {
+        if (layer.type === 'symbol') {
+          map.removeLayer(layer.id);
+        }
+      });
       dispatch(setMap(() => mapRef.current || undefined));
       if (showBoundaryInfo) {
         watchBoundaryChange(map);
