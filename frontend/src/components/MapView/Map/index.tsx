@@ -65,9 +65,14 @@ import MapGL, {
   MapRef,
   MapLayerMouseEvent,
 } from 'react-map-gl/maplibre';
-import { MapSourceDataEvent, Map as MaplibreMap } from 'maplibre-gl';
+import {
+  MapSourceDataEvent,
+  Map as MaplibreMap,
+  StyleSpecification,
+} from 'maplibre-gl';
 import { useSafeTranslation } from 'i18n';
 import { analysisResultSelector } from 'context/analysisResultStateSlice';
+import mapStyle from './mapStyle.json';
 
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -320,7 +325,7 @@ const MapComponent = memo(
           longitude: mapTempCenter[0],
           fitBoundsOptions: { padding: fitBoundsOptions.padding },
         }}
-        mapStyle={style.toString()}
+        mapStyle={(mapStyle as StyleSpecification) || style.toString()}
         onLoad={onMapLoad}
         onClick={mapOnClick(
           ...selectedLayers
